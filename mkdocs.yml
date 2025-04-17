@@ -12,3 +12,6 @@ nav:
   - Referências e Recursos de Aprendizagem: recursos.md
 
 theme: readthedocs
+
+markdown_extensions:
+  - admonition
