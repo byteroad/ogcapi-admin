@@ -138,6 +138,10 @@
 <li>Serviço <code>tiles-inspire</code>: publica tiles a partir de uma tabela com o cadastro, na BD inspire (externa).</li>
 <li>Serviço <code>tiles-caop</code>: publica tiles a partir de tabelas na BD caop (externa).</li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>O martin lê as tabelas da BD quando inicia. Por esse motivo, se forem adicionadas novas tabelas na BD, o martin não irá publicar-las até que o servidor seja reiniciado.</p>
+</div>
 <h2 id="servicos-de-monitorizacao-de-logs">Serviços de Monitorização de Logs</h2>
 <p>TODO</p>
 <h2 id="servicos-que-monitorizam-outros-servicos">Serviços que Monitorizam outros Serviços</h2>
