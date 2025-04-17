@@ -50,6 +50,14 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Arquitectura do Sistema</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#bases-de-dados-geospacial">Bases de dados geospacial</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#servicos-de-tiles">Serviços de Tiles</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#servicos-de-monitorizacao-de-logs">Serviços de Monitorização de Logs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#servicos-que-monitorizam-outros-servicos">Serviços que Monitorizam outros Serviços</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -100,7 +108,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="titulo">Titulo</h1>
+                <h1 id="arquitectura-do-sistema">Arquitectura do Sistema</h1>
+<p><img alt="Arquitectura de serviços" src="../img/docker-compose-cor.png" /></p>
+<p>A arquitectura do sistema, definida no <a href="https://github.com/byteroad/ogcapi-simple/blob/master/docker-compose.yml">ficheiro de configuração do docker compose</a>, articula os vários serviços que compõem a IDE. No centro, está a <a href="https://pygeoapi.io/">pygeoapi</a>, uma API de python que implementa vários Standards OGC API. Os serviços podem ser divididos em vários grupos:</p>
+<ul>
+<li>Base de dados geospacial.</li>
+<li>Serviços de Tiles.</li>
+<li>Serviços de monitorização de logs.</li>
+<li>Serviços que monitorizam outros serviços.</li>
+</ul>
+<p>Os serviços expostos à Internet são publicados por um servidor de web (<a href="https://httpd.apache.org/">apache</a>), que funciona como um proxy. É também este servidor que faz a gestão dos certificados SSL. Actualmente o servidor expõe três sub-domínios, que dão acesso a três serviços deste sistema:</p>
+<ul>
+<li><code>ogcapi.dgterritorio.gov.pt</code> -&gt; API com OGCAPI (pygeoapi).</li>
+<li><code>logs.dgterritorio.gov.pt</code> -&gt; monitorização de logs (matomo).</li>
+<li><code>logs.dgterritorio.gov.pt</code> -&gt; monitorização de serviços (GeoHealthCheck).</li>
+</ul>
+<p>Mais detalhes sobre a configuração do apache podem ser encontrados <a href="https://github.com/byteroad/ogcapi-simple/blob/master/apache-httpd/httpd-ssl.conf">neste</a> ficheiro.</p>
+<p>Nos próximos parágrafos, os serviços são descritos com maior detalhe.</p>
+<h2 id="bases-de-dados-geospacial">Bases de dados geospacial</h2>
+<p>A Base de Dados (BD) utilizada para guardar os dados geospaciais está no serviço <code>postgis</code>. Na altura em que foi escrito este manual este serviço tem um servidor PostgreSQL 15.0 com PostGIS 3.5.2. Quando o sistema inicia, um serviço chamado <code>db_and_api_init</code> é responsável por carregar os dados, em formatos diversos como Shapefile ou GeoPackage, na directoria <code>\data</code>. Para além de pré-processar e carregar esses dados, este serviço também cria as vistas necessárias na BD, e os ficheiros de configuração para a pygeoapi. </p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Nem todas as colecções publicadas pela pygeoapi se encontram guardadas nesta BD. Este sistema usa também alguns dados que estão guardados em BD externas (fora desta composição e fora desta máquina). Os endereços desses servidores, assim como outros parâmetros de conexão são injectados no <a href="https://github.com/byteroad/ogcapi-simple/blob/master/pygeoapi/docker.config.">ficheiro de configuração da pygeoapi</a> através de variáveis ambientais. Essas variáveis ambientais estão descritas num ficheiro <code>.env</code>, que se encontra na raiz da directoria onde se encontra o ficheiro de docker compose.</p>
+</div>
+<h2 id="servicos-de-tiles">Serviços de Tiles</h2>
+<p>As tiles vectoriais são publicadas pela aplicação <a href="https://github.com/maplibre/martin">martin</a>, que permite servir estes dados directamente a partir de tabelas de PostGIS. Para acelerar a performance, usaram-se <a href="https://en.wikipedia.org/wiki/Materialized_view">Materialized Views</a> no lugar de views, e criaram-se índices geospaciais e índices únicos para todas as vistas e tabelas. Como cada instância de martin fica assignada a uma BD, foram criadas três instâncias diferentes, assignadas a cada uma das BD usadas para guardar dados geospaciais:</p>
+<ul>
+<li>Serviço <code>tiles</code>: publica tiles a partir de tabelas na <a href="./#bases-de-dados-geospacial">base de dados geospacial</a>.</li>
+<li>Serviço <code>tiles-inspire</code>: publica tiles a partir de uma tabela com o cadastro, na BD inspire (externa).</li>
+<li>Serviço <code>tiles-caop</code>: publica tiles a partir de tabelas na BD caop (externa).</li>
+</ul>
+<h2 id="servicos-de-monitorizacao-de-logs">Serviços de Monitorização de Logs</h2>
+<p>TODO</p>
+<h2 id="servicos-que-monitorizam-outros-servicos">Serviços que Monitorizam outros Serviços</h2>
+<p>TODO</p>
               
             </div>
           </div><footer>
