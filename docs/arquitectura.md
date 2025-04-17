@@ -36,6 +36,10 @@ As tiles vectoriais são publicadas pela aplicação [martin](https://github.com
 * Serviço `tiles-inspire`: publica tiles a partir de uma tabela com o cadastro, na BD inspire (externa).
 * Serviço `tiles-caop`: publica tiles a partir de tabelas na BD caop (externa).
 
+!!! warning
+
+    O martin lê as tabelas da BD quando inicia. Por esse motivo, se forem adicionadas novas tabelas na BD, o martin não irá publicar-las até que o servidor seja reiniciado.
+
 ## Serviços de Monitorização de Logs
 
 TODO
