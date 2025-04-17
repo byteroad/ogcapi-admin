@@ -1,0 +1,15 @@
+site_name: Manual do Administrador
+
+nav:
+  - Inicio: index.md
+  - Tecnologias Utilizadas: tecnologias.md
+  - Arquitectura do Sistema: arquitectura.md
+  - Tarefas de Manutenção: tarefas.md
+  - Resolução de Problemas: resolucao.md
+  - Migração para outro Servidor: migracao.md
+  - Monitorização de Logs: logs.md
+  - Monitorização de Serviços: servicos.md
+  - Referências e Recursos de Aprendizagem: recursos.md
+
+
+theme: readthedocs
