@@ -1,7 +1,7 @@
 site_name: Manual do Administrador
 
 nav:
-  - Inicio: index.md
+  - Início: index.md
   - Tecnologias Utilizadas: tecnologias.md
   - Arquitectura do Sistema: arquitectura.md
   - Tarefas de Manutenção: tarefas.md
@@ -10,6 +10,5 @@ nav:
   - Monitorização de Logs: logs.md
   - Monitorização de Serviços: servicos.md
   - Referências e Recursos de Aprendizagem: recursos.md
-
 
 theme: readthedocs
