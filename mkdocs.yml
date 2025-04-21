@@ -1,4 +1,10 @@
-site_name: Manual do Administrador
+site_name: Manual de Administração
+site_description: "Manual de Administração da Infra Estrutura de Dados OGC API, da DGT."
+site_author: ByteRoad
+copyright: "&copy; 2025 DGT"
+site_url: https://byteroad.github.io/ogcapi-admin/
+#repo_url: https://github.com/byteroad/ogcapi-admin/
+
 
 nav:
   - Início: index.md
@@ -12,5 +18,9 @@ nav:
 
 theme: readthedocs
 
+plugins:
+    - search
+
 markdown_extensions:
   - admonition
+  - meta # option to add some meta tags on top, title, author, date, etc
