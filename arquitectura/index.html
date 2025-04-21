@@ -66,23 +66,19 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../resolucao/">Resolução de Problemas</a>
-                </li>
-              </ul>
-              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../migracao/">Migração para outro Servidor</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../logs/">Monitorização de Logs</a>
-                </li>
-              </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../servicos/">Monitorização de Serviços</a>
+                <li class="toctree-l1"><a class="reference internal" href="../resolucao/">Resolução de Problemas</a>
                 </li>
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../recursos/">Referências e Recursos de Aprendizagem</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contribuir/">Contribuir para este Manual</a>
                 </li>
               </ul>
       </div>
@@ -143,9 +139,33 @@
 <p>O martin lê as tabelas da BD quando inicia. Por esse motivo, se forem adicionadas novas tabelas na BD, o martin não irá publicar-las até que o servidor seja reiniciado.</p>
 </div>
 <h2 id="servicos-de-monitorizacao-de-logs">Serviços de Monitorização de Logs</h2>
-<p>TODO</p>
+<p>Os logs do servidor web (e.g. Apache) são monitorizados usando o <a href="https://matomo.org/">matomo</a>, uma alternativa ao Google Analytics que protege os dados e a privacidade dos utilizadores. O serviço <code>matomo</code> corresponde á aplicação matomo, cujos dados são guardados no serviço de <code>mariadb</code>. Finalmente, o <code>python_matomo</code> é um serviço de suporte que faz a ingestão dos logs do Apache através de um cron job.</p>
+<p>O matomo está configurado para monitorizar o website <code>ogcapi.dgterritorio.gov.pt</code>, apresentando uma dashboard com métricas como o número de visitantes ou os endpoints visitados, e ainda o mapa com a origem dos visitantes. A informação de como usar o matomo está disponível no <a href="https://matomo.org/guide/getting-started/getting-started/">guia do utilizador</a>.</p>
+<p><img alt="Dashboard do matomo" src="../img/matomo.png" /></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>O python_matomo lê os logs do Apache, através de um volume partilhado entre os containers. No caso de se mudar este container para uma outra máquina, seria necessário assegurar que se continua a ter acesso aos logs do Apache (por exemplo através de uma directoria de rede montada).</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Em príncipio os dados do matomo são persistidos na pasta <code>./matomo/data/matomo</code>, mesmo que containers e respectivos volumes sejam apagados. No caso de se migrar o servidor para outra máquina, é importante copiar essa directoria (tal como a BD), para que não se perca o histórico de logs do matomo.</p>
+</div>
 <h2 id="servicos-que-monitorizam-outros-servicos">Serviços que Monitorizam outros Serviços</h2>
-<p>TODO</p>
+<p>Os serviços OGC API, publicados pela pygeoapi são monitorizados usando o <a href="https://geohealthcheck.org/">GeoHealthCheck</a>(GHC), um monitor de QoS (Quality of Service) para serviços geospaciais. O GHC é constituído pelo serviço de backend - <code>gc_runner</code> e a aplicação de web <code>ghc_web</code>. Os dados são persistidos numa BD <a href="https://sqlite.org/">SQLite</a>. Na altura de escrita deste manual, o GHC está configurado para monitorizar um endpoint de OGC API - Features, mas outros endpoints (incluindo serviços OWS) podem ser adicionados.</p>
+<p><img alt="GeoHealtCheck" src="../img/ghc.png" /></p>
+<p>A informação sobre como configurar e usar o GHC está disponível na <a href="https://docs.geohealthcheck.org/en/latest/">documentação oficial do projeto</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Devido á configuração da rede, o container <code>ghc</code> não consegue aceder ao container <code>apache</code> pelo IP externo. Para ultrapassar esse problema, pode-se associar o IP de intranet do apache ao DNS, no ficheiro <code>/etc/localhosts</code>. Estes são os passos para executar essa acção, a partir da máquina onde está a correr a composição de docker:</p>
+<ul>
+<li>Entrar no container <code>ghc_web</code>: <code>docker exec -it ghc_web bash</code></li>
+<li>Instalar o ping (iputils-ping) e o nano: <code>apt-get update &amp;&amp; apt-get install iputils-ping nano -y</code></li>
+<li>Fazer ping container do apache para obter o seu endereço de IP na intranet: <code>ping httpd</code></li>
+<li>Adicionar este IP ao ficheiro /etc/hosts, fazendo-o apontar para <code>ogcapi.dgterritorio.gov.pt</code>: <code>echo "172.19.0.12 ogcapi.dgterritorio.gov.pt" &gt;&gt; /etc/hosts</code> (<em>substituir 172.19.0.12 pelo IP identificado no passo anterior!</em>)</li>
+<li>Confirmar que o ping para <code>ogcapi.dgterritorio.gov.pt</code> retorna o IP de intranet do Apache: <code>ping ogcapi.dgterritorio.gov.pt</code>. Em caso afirmativo, não é preciso fazer mais nada.</li>
+</ul>
+<p><strong>Será necessário executar estes passos, de cada vez que houver um restart do servidor!</strong></p>
+</div>
               
             </div>
           </div><footer>

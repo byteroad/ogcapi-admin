@@ -55,10 +55,6 @@
                 <li class="toctree-l1"><a class="reference internal" href="../tarefas/">Tarefas de Manutenção</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../resolucao/">Resolução de Problemas</a>
-                </li>
-              </ul>
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Migração para outro Servidor</a>
     <ul class="current">
@@ -66,15 +62,15 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../logs/">Monitorização de Logs</a>
-                </li>
-              </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../servicos/">Monitorização de Serviços</a>
+                <li class="toctree-l1"><a class="reference internal" href="../resolucao/">Resolução de Problemas</a>
                 </li>
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../recursos/">Referências e Recursos de Aprendizagem</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contribuir/">Contribuir para este Manual</a>
                 </li>
               </ul>
       </div>
@@ -100,14 +96,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="titulo">Titulo</h1>
-<p>Instalacao do sistema</p>
+                <h1 id="migracao-para-outro-servidor">Migração para outro Servidor</h1>
+<p>Migrar o sistema para outro servidor, implica fazer uma instalação nova do código que implementa o sistema descrito em <a href="../arquitectura/">Arquitectura do Sistema</a>.</p>
+<p>O sistema pode ser descarregado directamente do repositório de git:</p>
+<pre><code class="language-bash">git clone https://github.com/byteroad/ogcapi-simple.git
+</code></pre>
+<p>Entrar dentro do repositório:</p>
+<pre><code class="language-bash">cd ogcapi-simple
+</code></pre>
+<p>Antes de serem iniciados os containers (tal como está descrito em <a href="../tarefas/#gerir-as-aplicacoes">Gerir as Aplicações</a>), deve ser criado um ficheiro <code>.env</code>, na raiz desse repositório com as variáveis de ambiente. A forma mais simples é copiar o ficheiro que está na máquina ogcapi. Também devem ser copiados os certificados SSL, para a pasta <code>/etc/ssl</code> (ver <a href="../tarefas/#substituicao-dos-certificados-ssl">Substituição dos certificados SSL</a>)</p>
+<p>Depois, o sistema pode ser iniciado (no background) com:</p>
+<pre><code class="language-bash">docker compose up -d
+</code></pre>
+<p>No caso de ser uma instalacão nova, o docker daemon vai puxar a última versão das imagens de docker utilizadas e fazer o build das imagens necessárias.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>O sistema OGCAPI não tem a noção de estado, já que é recriado de cada vez que é iniciado. As mudanças são persistidas no código, permitindo que seja reproduzível em outras máquinas sem nenhum esforço adicional. </p>
+<p>No entanto a aplicação de monitorização de logs (<code>geohealthcheck</code>) e a aplicação de monitorização de serviços (<code>matomo</code>) guardam dados (e configurações) que são criados depois do sistema estar em marcha e que portanto não estão descritos no código. Para migrar o matomo, é necessário copiar directoria <code>./matomo/data</code>. O <a href="https://docs.geohealthcheck.org/en/latest/admin.html">manual de utilizadores do GeoHealthCheck</a> explica como exportar os dados para um ficheiro json e importar-los numa BD nova.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Por defeito, o GeoHealthCheck é instalado com uma password não segura. Para actualizar a password depois do sistema estar a funcionar, podem ser seguidos <a href="https://docs.geohealthcheck.org/en/latest/admin.html#passwords">estes passos</a>, desde o interior do container.</p>
+<ol>
+<li>Entrar no container <code>ghc_runner</code>: <code>docker exec -it ghc_runner bash</code>.</li>
+<li>Entrar pasta <code>GeoHealthCheck</code>: <code>cd GeoHealthCheck/</code></li>
+<li>Criar hash da password: <code>paver create_hash -p mypass</code> (substituir mypass pela password a utilizar)</li>
+<li>Install sqlite: <code>apt-get update &amp;&amp; apt-get install sqlite3</code></li>
+<li>Entrar dentro da BD: <code>sqlite3 DB/data.db</code></li>
+<li>Actualizar a password usando o hash criado no passo 3.: <code>UPDATE user SET password = '&lt;above hash-value&gt;' WHERE username == 'myusername';</code></li>
+<li>Sair da BD: '.q' </li>
+</ol>
+</div>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../resolucao/" class="btn btn-neutral float-left" title="Resolução de Problemas"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../logs/" class="btn btn-neutral float-right" title="Monitorização de Logs">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../tarefas/" class="btn btn-neutral float-left" title="Tarefas de Manutenção"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../resolucao/" class="btn btn-neutral float-right" title="Resolução de Problemas">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -130,10 +155,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../resolucao/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../tarefas/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../logs/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../resolucao/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
