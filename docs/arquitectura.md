@@ -42,8 +42,37 @@ As tiles vectoriais são publicadas pela aplicação [martin](https://github.com
 
 ## Serviços de Monitorização de Logs
 
-TODO
+Os logs do servidor web (e.g. Apache) são monitorizados usando o [matomo](https://matomo.org/), uma alternativa ao Google Analytics que protege os dados e a privacidade dos utilizadores. O serviço `matomo` corresponde á aplicação matomo, cujos dados são guardados no serviço de `mariadb`. Finalmente, o `python_matomo` é um serviço de suporte que faz a ingestão dos logs do Apache através de um cron job.
+
+O matomo está configurado para monitorizar o website `ogcapi.dgterritorio.gov.pt`, apresentando uma dashboard com métricas como o número de visitantes ou os endpoints visitados, e ainda o mapa com a origem dos visitantes. A informação de como usar o matomo está disponível no [guia do utilizador](https://matomo.org/guide/getting-started/getting-started/).
+
+![Dashboard do matomo](img/matomo.png)
+
+!!! warning
+
+    O python_matomo lê os logs do Apache, através de um volume partilhado entre os containers. No caso de se mudar este container para uma outra máquina, seria necessário assegurar que se continua a ter acesso aos logs do Apache (por exemplo através de uma directoria de rede montada).
+
+!!! info
+
+    Em príncipio os dados do matomo são persistidos na pasta `./matomo/data/matomo`, mesmo que containers e respectivos volumes sejam apagados. No caso de se migrar o servidor para outra máquina, é importante copiar essa directoria (tal como a BD), para que não se perca o histórico de logs do matomo.
+
 
 ## Serviços que Monitorizam outros Serviços
 
-TODO
+Os serviços OGC API, publicados pela pygeoapi são monitorizados usando o [GeoHealthCheck](https://geohealthcheck.org/)(GHC), um monitor de QoS (Quality of Service) para serviços geospaciais. O GHC é constituído pelo serviço de backend - `gc_runner` e a aplicação de web `ghc_web`. Os dados são persistidos numa BD [SQLite](https://sqlite.org/). Na altura de escrita deste manual, o GHC está configurado para monitorizar um endpoint de OGC API - Features, mas outros endpoints (incluindo serviços OWS) podem ser adicionados.
+
+![GeoHealtCheck](img/ghc.png)
+
+A informação sobre como configurar e usar o GHC está disponível na [documentação oficial do projeto](https://docs.geohealthcheck.org/en/latest/).
+
+!!! tip
+
+    Devido á configuração da rede, o container `ghc` não consegue aceder ao container `apache` pelo IP externo. Para ultrapassar esse problema, pode-se associar o IP de intranet do apache ao DNS, no ficheiro `/etc/localhosts`. Estes são os passos para executar essa acção, a partir da máquina onde está a correr a composição de docker:
+
+    * Entrar no container `ghc_web`: `docker exec -it ghc_web bash`
+    * Instalar o ping (iputils-ping) e o nano: `apt-get update && apt-get install iputils-ping nano -y`
+    * Fazer ping container do apache para obter o seu endereço de IP na intranet: `ping httpd`
+    * Adicionar este IP ao ficheiro /etc/hosts, fazendo-o apontar para `ogcapi.dgterritorio.gov.pt`: `echo "172.19.0.12 ogcapi.dgterritorio.gov.pt" >> /etc/hosts` (*substituir 172.19.0.12 pelo IP identificado no passo anterior!*)
+    * Confirmar que o ping para `ogcapi.dgterritorio.gov.pt` retorna o IP de intranet do Apache: `ping ogcapi.dgterritorio.gov.pt`. Em caso afirmativo, não é preciso fazer mais nada.
+  
+    **Será necessário executar estes passos, de cada vez que houver um restart do servidor!**

@@ -5,11 +5,10 @@ nav:
   - Tecnologias Utilizadas: tecnologias.md
   - Arquitectura do Sistema: arquitectura.md
   - Tarefas de Manutenção: tarefas.md
-  - Resolução de Problemas: resolucao.md
   - Migração para outro Servidor: migracao.md
-  - Monitorização de Logs: logs.md
-  - Monitorização de Serviços: servicos.md
+  - Resolução de Problemas: resolucao.md
   - Referências e Recursos de Aprendizagem: recursos.md
+  - Contribuir para este Manual: contribuir.md
 
 theme: readthedocs
 
