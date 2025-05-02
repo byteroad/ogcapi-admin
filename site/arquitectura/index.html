@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="ByteRoad" /><link rel="canonical" href="https://byteroad.github.io/ogcapi-admin/arquitectura/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Arquitectura do Sistema - Manual de Administração</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Arquitectura do Sistema";
+        var mkdocs_page_input_path = "arquitectura.md";
+        var mkdocs_page_url = "/ogcapi-admin/arquitectura/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Manual de Administração
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Início</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../tecnologias/">Tecnologias Utilizadas</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Arquitectura do Sistema</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#bases-de-dados-geospacial">Bases de dados geospacial</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#servicos-de-tiles">Serviços de Tiles</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#servicos-de-monitorizacao-de-logs">Serviços de Monitorização de Logs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#servicos-que-monitorizam-outros-servicos">Serviços que Monitorizam outros Serviços</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../tarefas/">Tarefas de Manutenção</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../migracao/">Migração para outro Servidor</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../resolucao/">Resolução de Problemas</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../recursos/">Referências e Recursos de Aprendizagem</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contribuir/">Contribuir para este Manual</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Manual de Administração</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Arquitectura do Sistema</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="arquitectura-do-sistema">Arquitectura do Sistema</h1>
+<p><img alt="Arquitectura de serviços" src="../img/docker-compose-cor.png" /></p>
+<p>A arquitectura do sistema, definida no <a href="https://github.com/byteroad/ogcapi-simple/blob/master/docker-compose.yml">ficheiro de configuração do docker compose</a>, articula os vários serviços que compõem a IDE. No centro, está a <a href="https://pygeoapi.io/">pygeoapi</a>, uma API de python que implementa vários Standards OGC API. Os serviços podem ser divididos em vários grupos:</p>
+<ul>
+<li>Base de dados geospacial.</li>
+<li>Serviços de Tiles.</li>
+<li>Serviços de monitorização de logs.</li>
+<li>Serviços que monitorizam outros serviços.</li>
+</ul>
+<p>Os serviços expostos à Internet são publicados por um servidor de web (<a href="https://httpd.apache.org/">apache</a>), que funciona como um proxy. É também este servidor que faz a gestão dos certificados SSL. Actualmente o servidor expõe três sub-domínios, que dão acesso a três serviços deste sistema:</p>
+<ul>
+<li><code>ogcapi.dgterritorio.gov.pt</code> -&gt; API com OGCAPI (pygeoapi).</li>
+<li><code>logs.dgterritorio.gov.pt</code> -&gt; monitorização de logs (matomo).</li>
+<li><code>logs.dgterritorio.gov.pt</code> -&gt; monitorização de serviços (GeoHealthCheck).</li>
+</ul>
+<p>Mais detalhes sobre a configuração do apache podem ser encontrados <a href="https://github.com/byteroad/ogcapi-simple/blob/master/apache-httpd/httpd-ssl.conf">neste</a> ficheiro.</p>
+<p>Nos próximos parágrafos, os serviços são descritos com maior detalhe.</p>
+<h2 id="bases-de-dados-geospacial">Bases de dados geospacial</h2>
+<p>A Base de Dados (BD) utilizada para guardar os dados geospaciais está no serviço <code>postgis</code>. Na altura em que foi escrito este manual este serviço tem um servidor PostgreSQL 15.0 com PostGIS 3.5.2. Quando o sistema inicia, um serviço chamado <code>db_and_api_init</code> é responsável por carregar os dados, em formatos diversos como Shapefile ou GeoPackage, na directoria <code>\data</code>. Para além de pré-processar e carregar esses dados, este serviço também cria as vistas necessárias na BD, e os ficheiros de configuração para a pygeoapi. </p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Nem todas as colecções publicadas pela pygeoapi se encontram guardadas nesta BD. Este sistema usa também alguns dados que estão guardados em BD externas (fora desta composição e fora desta máquina). Os endereços desses servidores, assim como outros parâmetros de conexão são injectados no <a href="https://github.com/byteroad/ogcapi-simple/blob/master/pygeoapi/docker.config.">ficheiro de configuração da pygeoapi</a> através de variáveis ambientais. Essas variáveis ambientais estão descritas num ficheiro <code>.env</code>, que se encontra na raiz da directoria onde se encontra o ficheiro de docker compose.</p>
+</div>
+<h2 id="servicos-de-tiles">Serviços de Tiles</h2>
+<p>As tiles vectoriais são publicadas pela aplicação <a href="https://github.com/maplibre/martin">martin</a>, que permite servir estes dados directamente a partir de tabelas de PostGIS. Para acelerar a performance, usaram-se <a href="https://en.wikipedia.org/wiki/Materialized_view">Materialized Views</a> no lugar de views, e criaram-se índices geospaciais e índices únicos para todas as vistas e tabelas. Como cada instância de martin fica assignada a uma BD, foram criadas três instâncias diferentes, assignadas a cada uma das BD usadas para guardar dados geospaciais:</p>
+<ul>
+<li>Serviço <code>tiles</code>: publica tiles a partir de tabelas na <a href="./#bases-de-dados-geospacial">base de dados geospacial</a>.</li>
+<li>Serviço <code>tiles-inspire</code>: publica tiles a partir de uma tabela com o cadastro, na BD inspire (externa).</li>
+<li>Serviço <code>tiles-caop</code>: publica tiles a partir de tabelas na BD caop (externa).</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>O martin lê as tabelas da BD quando inicia. Por esse motivo, se forem adicionadas novas tabelas na BD, o martin não irá publicar-las até que o servidor seja reiniciado.</p>
+</div>
+<h2 id="servicos-de-monitorizacao-de-logs">Serviços de Monitorização de Logs</h2>
+<p>Os logs do servidor web (e.g. Apache) são monitorizados usando o <a href="https://matomo.org/">matomo</a>, uma alternativa ao Google Analytics que protege os dados e a privacidade dos utilizadores. O serviço <code>matomo</code> corresponde á aplicação matomo, cujos dados são guardados no serviço de <code>mariadb</code>. Finalmente, o <code>python_matomo</code> é um serviço de suporte que faz a ingestão dos logs do Apache através de um cron job.</p>
+<p>O matomo está configurado para monitorizar o website <code>ogcapi.dgterritorio.gov.pt</code>, apresentando uma dashboard com métricas como o número de visitantes ou os endpoints visitados, e ainda o mapa com a origem dos visitantes. A informação de como usar o matomo está disponível no <a href="https://matomo.org/guide/getting-started/getting-started/">guia do utilizador</a>.</p>
+<p><img alt="Dashboard do matomo" src="../img/matomo.png" /></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>O python_matomo lê os logs do Apache, através de um volume partilhado entre os containers. No caso de se mudar este container para uma outra máquina, seria necessário assegurar que se continua a ter acesso aos logs do Apache (por exemplo através de uma directoria de rede montada).</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Em príncipio os dados do matomo são persistidos na pasta <code>./matomo/data/matomo</code>, mesmo que containers e respectivos volumes sejam apagados. No caso de se migrar o servidor para outra máquina, é importante copiar essa directoria (tal como a BD), para que não se perca o histórico de logs do matomo.</p>
+</div>
+<h2 id="servicos-que-monitorizam-outros-servicos">Serviços que Monitorizam outros Serviços</h2>
+<p>Os serviços OGC API, publicados pela pygeoapi são monitorizados usando o <a href="https://geohealthcheck.org/">GeoHealthCheck</a>(GHC), um monitor de QoS (Quality of Service) para serviços geospaciais. O GHC é constituído pelo serviço de backend - <code>gc_runner</code> e a aplicação de web <code>ghc_web</code>. Os dados são persistidos numa BD <a href="https://sqlite.org/">SQLite</a>. Na altura de escrita deste manual, o GHC está configurado para monitorizar um endpoint de OGC API - Features, mas outros endpoints (incluindo serviços OWS) podem ser adicionados.</p>
+<p><img alt="GeoHealtCheck" src="../img/ghc.png" /></p>
+<p>A informação sobre como configurar e usar o GHC está disponível na <a href="https://docs.geohealthcheck.org/en/latest/">documentação oficial do projeto</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Devido á configuração da rede, o container <code>ghc</code> não consegue aceder ao container <code>apache</code> pelo IP externo. Para ultrapassar esse problema, pode-se associar o IP de intranet do apache ao DNS, no ficheiro <code>/etc/localhosts</code>. Estes são os passos para executar essa acção, a partir da máquina onde está a correr a composição de docker:</p>
+<ul>
+<li>Entrar no container <code>ghc_web</code>: <code>docker exec -it ghc_web bash</code></li>
+<li>Instalar o ping (iputils-ping) e o nano: <code>apt-get update &amp;&amp; apt-get install iputils-ping nano -y</code></li>
+<li>Fazer ping container do apache para obter o seu endereço de IP na intranet: <code>ping httpd</code></li>
+<li>Adicionar este IP ao ficheiro /etc/hosts, fazendo-o apontar para <code>ogcapi.dgterritorio.gov.pt</code>: <code>echo "172.19.0.12 ogcapi.dgterritorio.gov.pt" &gt;&gt; /etc/hosts</code> (<em>substituir 172.19.0.12 pelo IP identificado no passo anterior!</em>)</li>
+<li>Confirmar que o ping para <code>ogcapi.dgterritorio.gov.pt</code> retorna o IP de intranet do Apache: <code>ping ogcapi.dgterritorio.gov.pt</code>. Em caso afirmativo, não é preciso fazer mais nada.</li>
+</ul>
+<p><strong>Será necessário executar estes passos, de cada vez que houver um restart do servidor!</strong></p>
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../tecnologias/" class="btn btn-neutral float-left" title="Tecnologias Utilizadas"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../tarefas/" class="btn btn-neutral float-right" title="Tarefas de Manutenção">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>&copy; 2025 DGT</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../tecnologias/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../tarefas/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

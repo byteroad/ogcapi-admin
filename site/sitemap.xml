@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://byteroad.github.io/ogcapi-admin/</loc>
+         <lastmod>2025-04-21</lastmod>
+    </url>
+    <url>
+         <loc>https://byteroad.github.io/ogcapi-admin/arquitectura/</loc>
+         <lastmod>2025-04-21</lastmod>
+    </url>
+    <url>
+         <loc>https://byteroad.github.io/ogcapi-admin/contribuir/</loc>
+         <lastmod>2025-04-21</lastmod>
+    </url>
+    <url>
+         <loc>https://byteroad.github.io/ogcapi-admin/migracao/</loc>
+         <lastmod>2025-04-21</lastmod>
+    </url>
+    <url>
+         <loc>https://byteroad.github.io/ogcapi-admin/recursos/</loc>
+         <lastmod>2025-04-21</lastmod>
+    </url>
+    <url>
+         <loc>https://byteroad.github.io/ogcapi-admin/resolucao/</loc>
+         <lastmod>2025-04-21</lastmod>
+    </url>
+    <url>
+         <loc>https://byteroad.github.io/ogcapi-admin/tarefas/</loc>
+         <lastmod>2025-04-21</lastmod>
+    </url>
+    <url>
+         <loc>https://byteroad.github.io/ogcapi-admin/tecnologias/</loc>
+         <lastmod>2025-04-21</lastmod>
+    </url>
+</urlset>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="ByteRoad" /><link rel="canonical" href="https://byteroad.github.io/ogcapi-admin/resolucao/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Resolução de Problemas - Manual de Administração</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Resolu\u00e7\u00e3o de Problemas";
+        var mkdocs_page_input_path = "resolucao.md";
+        var mkdocs_page_url = "/ogcapi-admin/resolucao/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Manual de Administração
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Início</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../tecnologias/">Tecnologias Utilizadas</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../arquitectura/">Arquitectura do Sistema</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../tarefas/">Tarefas de Manutenção</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../migracao/">Migração para outro Servidor</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Resolução de Problemas</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../recursos/">Referências e Recursos de Aprendizagem</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contribuir/">Contribuir para este Manual</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Manual de Administração</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Resolução de Problemas</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="resolucao-de-problemas">Resolução de Problemas</h1>
+<p>Esta secção compila alguns problemas comuns que podem surgir, e as soluções identificadas. Caso identifiquem outros problemas/soluções que mereçam a pena ser adicionados ou actualizados, podem contribuir utilizando os mecanismos identificados <a href="../contribuir/">nesta secção</a>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Porque é que a colecção dos ortos, cadastro ou caop deixou de funcionar?</p>
+</div>
+<p>Estas colecções dependem de servidores externos. Devem ser verificados se estes serviços estão acessíveis:</p>
+<ul>
+<li>ortos -&gt; <code>https://ortos.dgterritorio.gov.pt/wms/ortosat2023</code></li>
+<li>cadastro -&gt; BD inspire</li>
+<li>caop -&gt; BD caop</li>
+</ul>
+<p>Para mais detalhes, consultar o <a href="https://github.com/byteroad/ogcapi-simple/blob/master/pygeoapi/docker.config.yml">ficheiro de configuração da pygeoapi</a>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Porque é que as novas tabelas que foram adicionadas ao PostGIS não estão a ser disponibilizadas como tiles?</p>
+</div>
+<p>O <code>martin</code> lê as tabelas da BD quando inicia. Por esse motivo, se forem adicionadas novas tabelas na BD, o martin não irá publicar-las até que o servidor de tiles relevante seja reiniciado.</p>
+<pre><code class="language-bash">docker compose restart ogcapi-simple-tiles-1
+docker compose restart tiles_caop
+docker compose restart tiles_inspire
+</code></pre>
+<p>Mais informações sobre o serviço <a href="../arquitectura/#servicos-de-tiles"><code>martin</code></a>.</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>A máquina de Ubuntu foi reiniciada, mas os serviços estão em baixo. Como iniciar-los?</p>
+</div>
+<p>Se por algum motivo os serviços estiverem em baixo, as aplicacões podem ser iniciadas seguindo as instrucões <a href="../tarefas/#gerir-as-aplicacoes">nesta secção</a> </p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>A monitorização de serviços indica que eles não estão a funcionar, quando na realidade estão. Como resolver esta situação?</p>
+</div>
+<p>o <code>geohealthcheck</code> perdeu as configurações do <code>/etc/hosts</code> (por exemplo com um restart da máquina) e não consegue aceder ao IP da OGC API. Os passos para resolver esta situação estão explicados <a href="../arquitectura/#servicos-que-monitorizam-outros-servicos">aqui</a>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../migracao/" class="btn btn-neutral float-left" title="Migração para outro Servidor"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../recursos/" class="btn btn-neutral float-right" title="Referências e Recursos de Aprendizagem">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>&copy; 2025 DGT</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../migracao/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../recursos/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="ByteRoad" /><link rel="canonical" href="https://byteroad.github.io/ogcapi-admin/tarefas/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Tarefas de Manutenção - Manual de Administração</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Tarefas de Manuten\u00e7\u00e3o";
+        var mkdocs_page_input_path = "tarefas.md";
+        var mkdocs_page_url = "/ogcapi-admin/tarefas/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Manual de Administração
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Início</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../tecnologias/">Tecnologias Utilizadas</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../arquitectura/">Arquitectura do Sistema</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Tarefas de Manutenção</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#manutencao-do-servidor">Manutenção do Servidor</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#gerir-as-aplicacoes">Gerir as Aplicações</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#actualizar-as-aplicacoes">Actualizar as Aplicações</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#assegurar-se-de-que-o-ghc-consegue-aceder-ao-apache">Assegurar-se de que o GHC consegue aceder ao Apache</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#substituicao-dos-certificados-ssl">Substituição dos certificados SSL</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#contribuir-mudancas-nas-aplicacoes">Contribuir Mudanças nas Aplicações</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../migracao/">Migração para outro Servidor</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../resolucao/">Resolução de Problemas</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../recursos/">Referências e Recursos de Aprendizagem</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contribuir/">Contribuir para este Manual</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Manual de Administração</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Tarefas de Manutenção</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="tarefas-de-manutencao">Tarefas de Manutenção</h1>
+<p>Esta secção descreve algumas tarefas comuns de manutenção do servidor e da aplicação.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>A leitura desta secção não substitui a aprendizagem de como gerir uma máquina de linux, e como usar docker, docker compose ou git. São providenciados alguns recursos sobre este tema na secção <a href="../recursos/">Referências e Recursos de Aprendizagem</a>.</p>
+</div>
+<h2 id="manutencao-do-servidor">Manutenção do Servidor</h2>
+<p>O servidor deverá ser actualizado de forma regular, seguindo as boas práticas de gestão de uma máquina de Linux:</p>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get upgrade
+</code></pre>
+<p>Algumas actualizações updates podem requerer o restart da máquina. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As LTS proporcionam 5 anos de actualizações de segurança; depois desse período deve-se fazer o upgrade da distribuição.</p>
+</div>
+<h2 id="gerir-as-aplicacoes">Gerir as Aplicações</h2>
+<p>O sistema descrito em <a href="../arquitectura/#arquitectura-do-sistema">Arquitectura do Sistema</a> pode ser gerido utilizando comandos standard de <code>docker compose</code>, desde a raiz do projeto (a pasta onde se encontra o ficheiro docker-compose.yml).</p>
+<p>Iniciar as aplicações (em background):</p>
+<pre><code class="language-bash">docker compose up -d
+</code></pre>
+<p>Visualizar os logs em tempo real:</p>
+<pre><code class="language-bash">docker compose logs --follow
+</code></pre>
+<p>Parar as aplicações:</p>
+<pre><code class="language-bash">docker compose down
+</code></pre>
+<p>Reiniciar as aplicações:</p>
+<pre><code class="language-bash">docker compose restart
+</code></pre>
+<h2 id="actualizar-as-aplicacoes">Actualizar as Aplicações</h2>
+<p>O código do sistema descrito em <a href="../arquitectura/#arquitectura-do-sistema">Arquitectura do Sistema</a> encontra-se num <a href="https://github.com/byteroad/ogcapi-simple">repositório de git</a>. Para instalar actualizações, é necessário descarregar as mudanças desde o repositório original, fazer o build dos containers caso necessário e voltar a lançar os containers.</p>
+<ol>
+<li>Descarregar as mudanças remotas para o repositório local: <code>git pull</code>.</li>
+<li>Parar as aplicações (ver <a href="./#gerir-as-aplicacoes">Gerir as Aplicações</a>).</li>
+<li>Fazer o build das imagens de docker: <code>docker compose build</code>.</li>
+<li>Iniciar as aplicações (em background) (ver <a href="./#gerir-as-aplicacoes">Gerir as Aplicações</a>).</li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>O sistema usa algumas imagens de base que podem beneficiar de actualizações. Essas imagens podem ser actualizadas usando o comando <code>docker compose pull</code> e depois reiniciando as aplicações (ver <a href="./#gerir-as-aplicacoes">Gerir as Aplicações</a>).</p>
+</div>
+<h2 id="assegurar-se-de-que-o-ghc-consegue-aceder-ao-apache">Assegurar-se de que o GHC consegue aceder ao Apache</h2>
+<p>De cada vez que os containers são criados de novo (por exemplo, com um restart do servidor), é importante assegurar-se de que o container GHC consegue aceder a <code>https://ogcapi.dgterritorio.gov.pt/</code>. Se não for assim, o GHC vai falhar a monitorização dos serviços, assumindo que eles não estão a funcionar. Os passos para resolver esta situação estão descritos <a href="../arquitectura/#servicos-que-monitorizam-outros-servicos">aqui</a>.</p>
+<h2 id="substituicao-dos-certificados-ssl">Substituição dos certificados SSL</h2>
+<p>Os certificados SSL estão guardados na pasta <code>/etc/cert</code>. No caso de instalar novos certificados com o mesmo nome, será necessário parar as aplicações e voltar a iniciar-las, para que os volumes dos containers sejam criados de novo, já com os novos certificados. No caso de os certificados terem nomes diferentes ou estarem noutra localização, é necessário também actualizar o mapping no <a href="https://github.com/byteroad/ogcapi-simple/blob/master/docker-compose.yml#L38">docker-compose.yml</a> para reflectir essas mudanças:</p>
+<pre><code class="language-yaml">      - /etc/cert/2ogcapi.pem:/usr/local/apache2/conf/ogcapi/fullchain.pem
+      - /etc/cert/ogcapi_privkey4.pem:/usr/local/apache2/conf/ogcapi/privkey.pem
+      - /etc/cert/2logs.pem:/usr/local/apache2/conf/matomo/fullchain.pem  
+      - /etc/cert/logs_privkey4.pem:/usr/local/apache2/conf/matomo/privkey.pem
+      - /etc/cert/1ghc.pem:/usr/local/apache2/conf/health/fullchain.pem  
+      - /etc/cert/ghc_privkey1.pem:/usr/local/apache2/conf/health/privkey.pem
+</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Em cada uma destas strings de <a href="https://en.wikipedia.org/wiki/YAML">YAML</a>, a primeira parte (antes do <code>:</code>) representa o caminho e nome da chave publica ou privada do certificado (por exemplo, <code>/etc/cert/2ogcapi.pem</code>).</p>
+</div>
+<h2 id="contribuir-mudancas-nas-aplicacoes">Contribuir Mudanças nas Aplicações</h2>
+<p>Contribuiçoes para o código do sistema, incluindo alterações ao ficheiro <code>docker-compose.yml</code> devem ser feitas directamente no <a href="https://github.com/byteroad/ogcapi-simple">repositório git</a>, através dos mecanismos normais de contribuição do git.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../arquitectura/" class="btn btn-neutral float-left" title="Arquitectura do Sistema"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../migracao/" class="btn btn-neutral float-right" title="Migração para outro Servidor">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>&copy; 2025 DGT</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../arquitectura/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../migracao/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
